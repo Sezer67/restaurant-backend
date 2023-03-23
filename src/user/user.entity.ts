@@ -1,5 +1,13 @@
 import { Role } from 'src/enums/user.enum';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Restaurant } from 'src/restaurant/restaurant.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -20,4 +28,8 @@ export class User extends BaseEntity {
 
   @Column({ type: 'text', enum: Role, nullable: false, default: Role.Customer })
   role: Role;
+
+  @OneToOne(() => Restaurant, (entity) => entity.user, { nullable: true })
+  @JoinColumn({ name: 'restaurantId' })
+  restaurant: Restaurant;
 }

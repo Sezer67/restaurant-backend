@@ -6,7 +6,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  @Get('')
+  @Get('me')
   @UseGuards(AuthGuard('user'))
   get(@Req() req: any) {
     return req.user;
