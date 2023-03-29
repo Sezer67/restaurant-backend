@@ -8,6 +8,7 @@ import { LoginBodyDto } from './dto/user-login.dto';
 import { ILoginResponse } from 'src/interfaces/user.interface';
 import { UserCreateDto } from './dto/user-create.dto';
 import * as bcrypt from 'bcryptjs';
+import { Role } from 'src/enums/user.enum';
 
 @Injectable()
 export class UserService {
@@ -89,6 +90,22 @@ export class UserService {
       const newUser = await this.repo.save(dto);
 
       delete newUser.password;
+      // eğer kullanıcı restaurant işletecekse token üretilip gönderilmeli
+      if(dto.role === Role.Restaurant){
+        const jwtPayload: IJwtPayload = {
+          id: user.id,
+          email: user.email,
+        };
+  
+        const token = await this.jwtService.signAsync(jwtPayload, {
+          algorithm: 'HS256',
+          secret: process.env.JWT_SECRET,
+        });
+        return {
+          user:newUser,
+          token
+        }
+      }
       return newUser;
     } catch (error) {
       throw error;
