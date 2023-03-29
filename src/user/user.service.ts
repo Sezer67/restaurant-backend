@@ -93,8 +93,8 @@ export class UserService {
       // eğer kullanıcı restaurant işletecekse token üretilip gönderilmeli
       if(dto.role === Role.Restaurant){
         const jwtPayload: IJwtPayload = {
-          id: user.id,
-          email: user.email,
+          id: newUser.id,
+          email: newUser.email,
         };
   
         const token = await this.jwtService.signAsync(jwtPayload, {
