@@ -4,6 +4,7 @@ import { Restaurant } from './restaurant.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
 import { RestaurantCreateDto } from './dto/restaurant-create.dto';
+import { LookupQueryDto } from './dto/restaurant-lookup.dto';
 
 @Injectable()
 export class ResturantService {
@@ -41,6 +42,21 @@ export class ResturantService {
         ...dto,
         userId: user.id,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async lookup(dto:LookupQueryDto){
+    try {
+      const query:any = {};
+      {
+        if(dto.offset)
+          query.skip = dto.offset;
+        if(dto.limit)
+          query.take = dto.limit;
+      }
+      return await this.repo.find(query);
     } catch (error) {
       throw error;
     }
