@@ -22,4 +22,12 @@ export class RestaurantController {
   lookup(@Query() dto:LookupQueryDto){
     return this.service.lookup(dto);
   }
+
+  @UseGuards(AuthGuard('user'),RolesGuard)
+  @Roles(Role.Restaurant)
+  @Get('me')
+  restaurantMe(@Req() req:any){
+    return this.service.restaurantMe(req.user);
+  }
+
 }

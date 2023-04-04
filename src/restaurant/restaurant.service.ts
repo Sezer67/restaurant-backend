@@ -61,4 +61,15 @@ export class ResturantService {
       throw error;
     }
   }
+  async restaurantMe(user:User){
+    try {
+      return await this.repo.findOne({
+        where:{
+          userId:user.id
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
