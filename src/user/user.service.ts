@@ -9,6 +9,8 @@ import { ILoginResponse } from 'src/interfaces/user.interface';
 import { UserCreateDto } from './dto/user-create.dto';
 import * as bcrypt from 'bcryptjs';
 import { Role } from 'src/enums/user.enum';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserService {
@@ -16,6 +18,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly repo: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService
   ) {}
 
   async getUserById(id: string): Promise<User> {
@@ -107,6 +110,22 @@ export class UserService {
         }
       }
       return newUser;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async forgotPassword(dto:ForgotPasswordDto){
+    try {
+      console.log(dto.email);
+      const user = await this.repo.findOne({
+        where:{
+          email: dto.email
+        }
+      });
+      console.log(user);
+      await this.mailService.sendPasswordForgotMail(user);
+      
     } catch (error) {
       throw error;
     }
