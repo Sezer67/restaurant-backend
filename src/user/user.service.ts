@@ -117,14 +117,15 @@ export class UserService {
 
   async forgotPassword(dto:ForgotPasswordDto){
     try {
-      console.log(dto.email);
       const user = await this.repo.findOne({
         where:{
           email: dto.email
         }
       });
-      console.log(user);
-      await this.mailService.sendPasswordForgotMail(user);
+      if(!user){
+        throw new HttpException('Email is not found',400);
+      }
+      return await this.mailService.sendPasswordForgotMail(user);
       
     } catch (error) {
       throw error;
