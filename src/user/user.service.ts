@@ -9,7 +9,7 @@ import { ILoginResponse } from 'src/interfaces/user.interface';
 import { UserCreateDto } from './dto/user-create.dto';
 import * as bcrypt from 'bcryptjs';
 import { Role } from 'src/enums/user.enum';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ForgotPasswordDto, NewPasswordDto } from './dto/forgot-password.dto';
 import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
@@ -125,8 +125,41 @@ export class UserService {
       if(!user){
         throw new HttpException('Email is not found',400);
       }
-      return await this.mailService.sendPasswordForgotMail(user);
+
+      const jwtPayload: IJwtPayload = {
+        id: user.id,
+        email: user.email,
+      };
+
+      const token = await this.jwtService.signAsync(jwtPayload, {
+        algorithm: 'HS256',
+        secret: process.env.JWT_SECRET,
+      });
+
+      return await this.mailService.sendPasswordForgotMail(user,token);
       
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async newPassword(dto: NewPasswordDto,user: User){
+    try {
+
+      const passCheck = await bcrypt.compare(dto.password, user.password);
+
+      if(passCheck){
+        throw new HttpException('Your new password cannot be the same as your old password.',HttpStatus.BAD_REQUEST);
+      }
+
+      const hash = await bcrypt.hash(dto.password, 10);
+      user.password = hash;
+
+      await this.repo.save(user);
+
+      return {
+        message: "success"
+      };
     } catch (error) {
       throw error;
     }
