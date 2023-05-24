@@ -1,5 +1,5 @@
 import { Transform, Type } from "class-transformer";
-import { IsNumber, IsOptional } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class LookupQueryDto {
     @IsOptional()
@@ -13,5 +13,9 @@ export class LookupQueryDto {
     @Transform(({value}) => +value)
     @IsNumber()
     limit?:number;
+
+    @IsOptional()
+    @IsString()
+    id?: string;
 
 }

@@ -51,12 +51,22 @@ export class ResturantService {
     try {
       const query:any = {};
       {
+        const where: any = {};
         if(dto.offset)
           query.skip = dto.offset;
         if(dto.limit)
           query.take = dto.limit;
+        if(dto.id){
+          where.id = dto.id;
+        }
+        query.where = where;
       }
-      return await this.repo.find(query);
+      const [rows,count] =  await this.repo.findAndCount(query);
+
+      return {
+        rows,
+        count
+      };
     } catch (error) {
       throw error;
     }
