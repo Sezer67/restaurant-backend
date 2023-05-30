@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
 import { RestaurantCreateDto } from './dto/restaurant-create.dto';
 import { LookupQueryDto } from './dto/restaurant-lookup.dto';
+import { WifiEnum } from 'src/enums/restaurant.enum';
 
 @Injectable()
 export class ResturantService {
@@ -58,6 +59,16 @@ export class ResturantService {
           query.take = dto.limit;
         if(dto.id){
           where.id = dto.id;
+        }
+        if(dto.wifi) {
+          if(dto.wifi === WifiEnum.YES) {
+            where.isWifi = true;
+          } else {
+            where.isWifi = false;
+          }
+        }
+        if(dto.type){
+          where.type = dto.type;
         }
         query.where = where;
       }
