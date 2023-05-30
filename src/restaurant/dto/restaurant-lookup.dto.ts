@@ -30,3 +30,9 @@ export class LookupQueryDto {
     type?: RestaurantType;
 
 }
+
+export class SearchQueryDto {
+    @IsOptional()
+    @IsString()
+    name?: string;
+}

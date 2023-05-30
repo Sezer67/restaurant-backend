@@ -5,7 +5,7 @@ import { RolesGuard } from 'src/guards/role.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/user.enum';
 import { RestaurantCreateDto } from './dto/restaurant-create.dto';
-import { LookupQueryDto } from './dto/restaurant-lookup.dto';
+import { LookupQueryDto, SearchQueryDto } from './dto/restaurant-lookup.dto';
 
 @Controller('restaurant')
 export class RestaurantController {
@@ -21,6 +21,11 @@ export class RestaurantController {
   @Get()
   lookup(@Query() dto:LookupQueryDto){
     return this.service.lookup(dto);
+  }
+
+  @Get('search')
+  search(@Query() dto: SearchQueryDto){
+    return this.service.search(dto);
   }
 
   @UseGuards(AuthGuard('user'),RolesGuard)

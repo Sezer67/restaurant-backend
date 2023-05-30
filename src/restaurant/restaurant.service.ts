@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from './restaurant.entity';
-import { Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { User } from 'src/user/user.entity';
 import { RestaurantCreateDto } from './dto/restaurant-create.dto';
-import { LookupQueryDto } from './dto/restaurant-lookup.dto';
+import { LookupQueryDto, SearchQueryDto } from './dto/restaurant-lookup.dto';
 import { WifiEnum } from 'src/enums/restaurant.enum';
 
 @Injectable()
@@ -78,6 +78,35 @@ export class ResturantService {
         rows,
         count
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async search(dto: SearchQueryDto){
+    try {
+      const search = ILike(`%${dto.name}%`);
+      const [rows, count] = await this.repo.findAndCount({
+        where: [
+          {
+            name: search,
+          },
+          {
+            city: search,
+          }
+        ],
+        select: {
+          id: true,
+          city: true,
+          name: true,
+          img: true,
+        }
+      });
+
+      return {
+        rows, count
+      }
+
     } catch (error) {
       throw error;
     }

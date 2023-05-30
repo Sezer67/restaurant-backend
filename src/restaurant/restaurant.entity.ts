@@ -32,6 +32,9 @@ export class Restaurant extends BaseEntity {
   @Column({ type: 'boolean', default: false })
   isWifi: boolean;
 
+  @Column({nullable: true, default: null})
+  img: string;
+
   @Column({
     type: 'smallint',
     enum: RestaurantType,
