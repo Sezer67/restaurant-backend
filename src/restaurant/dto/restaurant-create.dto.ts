@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
 } from 'class-validator';
 import { RestaurantType } from 'src/enums/restaurant.enum';
@@ -35,4 +36,8 @@ export class RestaurantCreateDto {
   @IsNotEmpty()
   @IsEnum(RestaurantType)
   type: RestaurantType;
+
+  @IsOptional()
+  @IsString()
+  img?: string;
 }
