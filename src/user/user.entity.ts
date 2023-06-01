@@ -32,4 +32,8 @@ export class User extends BaseEntity {
   @OneToOne(() => Restaurant, (entity) => entity.user, { nullable: true })
   @JoinColumn({ name: 'restaurantId' })
   restaurant: Restaurant;
+
+  @Column({nullable: true})
+  restaurantId: string;
+
 }

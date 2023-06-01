@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { MailModule } from './mail/mail.module';
+import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { MailModule } from './mail/mail.module';
     UserModule,
     AuthModule,
     RestaurantModule,
-    MailModule
+    MailModule,
+    MenuModule,
   ],
   controllers: [],
   providers: [],

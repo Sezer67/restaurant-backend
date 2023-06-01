@@ -1,10 +1,12 @@
 import { RestaurantType } from 'src/enums/restaurant.enum';
+import { Menu } from 'src/menu/menu.entity';
 import { User } from 'src/user/user.entity';
 import {
   BaseEntity,
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -51,4 +53,7 @@ export class Restaurant extends BaseEntity {
 
   @Column()
   userId: string;
+
+  @OneToMany(() => Menu, (entity) => entity.restaurant, {onDelete: 'CASCADE'})
+  menus: Menu[];
 }
