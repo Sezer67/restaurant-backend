@@ -11,6 +11,7 @@ import * as bcrypt from 'bcryptjs';
 import { Role } from 'src/enums/user.enum';
 import { ForgotPasswordDto, NewPasswordDto } from './dto/forgot-password.dto';
 import { MailService } from 'src/mail/mail.service';
+import { ContactAdminDto } from './dto/contact-admin.dto';
 
 @Injectable()
 export class UserService {
@@ -93,7 +94,11 @@ export class UserService {
       const newUser = await this.repo.save(dto);
 
       delete newUser.password;
+      await this.mailService.sendRegisterSuccessMail(newUser);
+
       // eğer kullanıcı restaurant işletecekse token üretilip gönderilmeli
+
+
       if(dto.role === Role.Restaurant){
         const jwtPayload: IJwtPayload = {
           id: newUser.id,
@@ -109,6 +114,7 @@ export class UserService {
           token
         }
       }
+
       return newUser;
     } catch (error) {
       throw error;
@@ -160,6 +166,14 @@ export class UserService {
       return {
         message: "success"
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async contactAdmin(dto: ContactAdminDto){
+    try {
+      return await this.mailService.contactAdmin(dto);
     } catch (error) {
       throw error;
     }

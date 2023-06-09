@@ -18,7 +18,7 @@ export class Menu extends BaseEntity {
     @Column({nullable: false, default: 0})
     price: number;
 
-    @ManyToOne(() => Restaurant, (entity) => entity.menus, { nullable: false })
+    @ManyToOne(() => Restaurant, (entity) => entity.menus, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({name: 'restaurantId'})
     restaurant: Restaurant;
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { MenuService } from "./menu.service";
 import { AuthGuard } from "@nestjs/passport";
 import { RolesGuard } from "src/guards/role.guard";
@@ -36,5 +36,13 @@ export class MenuController {
     updateMenu(@Param('id') id:string, @Body() dto: UpdateMenuDto){
         return this.service.update(id, dto);
     }
+
+    @Delete(':id')
+    @UseGuards(AuthGuard('user'),RolesGuard)
+    @Roles(Role.Restaurant)
+    deleteMenu(@Param('id') id:string,){
+        return this.service.delete(id);
+    }
+    
 
 }
